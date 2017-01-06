@@ -144,7 +144,7 @@ class Dumper
     protected function addService()
     {
         $this->domService = $this->document->createElement('service');
-        $this->domService->setAttribute('name', $this->definition->getName().'Service');
+        $this->domService->setAttribute('name', $this->definition->getName());
 
         $this->domDefinitions->appendChild($this->domService);
 
