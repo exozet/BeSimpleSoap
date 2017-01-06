@@ -31,7 +31,8 @@ class Method
         $this->name = $name;
 
         $this->headers = new Message($name.'Header');
-        $this->input = new Message($name.'Request');
+        //$this->input = new Message($name.'Request');
+        $this->input = new Message($name);
         $this->output = new Message($name.'Response');
         $this->fault = new Message($name.'Fault');
     }
