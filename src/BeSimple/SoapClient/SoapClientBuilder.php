@@ -245,4 +245,20 @@ class SoapClientBuilder extends AbstractSoapBuilder
     {
         $this->validateWsdl();
     }
+
+    /**
+     * SOAP attachment type SwA.
+     *
+     * @param $login
+     * @param $password
+     *
+     * @return \BeSimple\SoapServer\SoapServerBuilder
+     */
+    public function withBasicHttpAuth($login, $password)
+    {
+        $this->soapOptions['login'] = $login;
+        $this->soapOptions['password'] = $password;
+
+        return $this;
+    }
 }

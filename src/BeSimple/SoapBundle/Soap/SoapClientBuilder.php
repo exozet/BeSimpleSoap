@@ -36,6 +36,10 @@ class SoapClientBuilder extends BaseSoapClientBuilder
         if ($converters) {
             $this->withTypeConverters($converters);
         }
+
+        if (isset($options['login'])) {
+            $this->withBasicHttpAuth($options['login'], $options['password']);
+        }
     }
 
     public function build()
@@ -54,6 +58,8 @@ class SoapClientBuilder extends BaseSoapClientBuilder
             'cache_type' => null,
             'exceptions' => true,
             'user_agent' => 'BeSimpleSoap',
+            'login' => false,
+            'password' => false,
         );
 
         // check option names and live merge, if errors are encountered Exception will be thrown

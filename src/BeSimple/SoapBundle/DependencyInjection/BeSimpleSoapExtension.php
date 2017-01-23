@@ -129,6 +129,11 @@ class BeSimpleSoapExtension extends Extension
                 ));
             }
 
+            if (isset($options['basic_http_auth'])) {
+                $defOptions['login'] = $options['basic_http_auth']['login'];
+                $defOptions['password'] = $options['basic_http_auth']['password'];
+            }
+
             if (isset($defOptions['cache_type'])) {
                 $defOptions['cache_type'] = $this->getCacheType($defOptions['cache_type']);
             }
