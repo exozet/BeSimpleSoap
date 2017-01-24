@@ -106,7 +106,7 @@ class BeSimpleSoapExtension extends Extension
                     ->getDefinition('besimple.soap.client.builder')
                     ->getArgument(1);
 
-            foreach (array('cache_type', 'user_agent') as $key) {
+            foreach (array('cache_type', 'user_agent', 'request_url') as $key) {
                 if (isset($options[$key])) {
                     $defOptions[$key] = $options[$key];
                 }

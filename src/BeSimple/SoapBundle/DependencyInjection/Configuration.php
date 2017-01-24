@@ -98,6 +98,7 @@ class Configuration
                                         ->scalarNode('password')->isRequired()->end()
                                     ->end()
                                 ->end()
+                                ->scalarNode('request_url')->end()
                                 ->arrayNode('proxy')
                                     ->info('proxy configuration')
                                     ->addDefaultsIfNotSet()

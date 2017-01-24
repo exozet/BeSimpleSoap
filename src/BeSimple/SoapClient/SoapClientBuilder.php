@@ -247,8 +247,6 @@ class SoapClientBuilder extends AbstractSoapBuilder
     }
 
     /**
-     * SOAP attachment type SwA.
-     *
      * @param $login
      * @param $password
      *
@@ -258,6 +256,18 @@ class SoapClientBuilder extends AbstractSoapBuilder
     {
         $this->soapOptions['login'] = $login;
         $this->soapOptions['password'] = $password;
+
+        return $this;
+    }
+
+    /**
+     * @param $requestUrl
+     *
+     * @return \BeSimple\SoapServer\SoapServerBuilder
+     */
+    public function withRequestUrl($requestUrl)
+    {
+        $this->soapOptions['request_url'] = $requestUrl;
 
         return $this;
     }
