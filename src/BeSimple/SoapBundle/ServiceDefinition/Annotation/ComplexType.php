@@ -17,6 +17,7 @@ class ComplexType extends Configuration
 {
     private $name;
     private $value;
+    private $namespace = '';
     private $isNillable = false;
 
     public function getName()
@@ -52,5 +53,15 @@ class ComplexType extends Configuration
     public function getAliasName()
     {
         return 'complextype';
+    }
+
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    public function setNamespace($namespace)
+    {
+        $this->namespace = $namespace;
     }
 }

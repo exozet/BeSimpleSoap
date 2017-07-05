@@ -59,6 +59,7 @@ class AnnotationComplexTypeLoader extends AnnotationClassLoader
                 $propertyComplexType->setValue($complexType->getValue());
                 $propertyComplexType->setNillable($complexType->isNillable());
                 $propertyComplexType->setName($property->getName());
+                $annotations['namespace'] = $complexType->getNamespace();
                 $annotations['properties']->add($propertyComplexType);
             }
         }
