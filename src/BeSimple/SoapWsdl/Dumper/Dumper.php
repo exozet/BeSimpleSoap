@@ -58,6 +58,11 @@ class Dumper
     public function __construct(Definition $definition, array $options = array())
     {
         $this->definition = $definition;
+
+        if ('' != $this->definition->getTargetName()) {
+            $this->definition->setName($this->definition->getTargetName());
+        }
+
         $this->document = new \DOMDocument('1.0', 'utf-8');
 
         $this->setOptions($options);

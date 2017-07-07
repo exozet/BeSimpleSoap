@@ -137,6 +137,7 @@ class Configuration
                         ->prototype('array')
                         ->children()
                             ->scalarNode('namespace')->isRequired()->end()
+                            ->scalarNode('target_name')->defaultValue('')->end()
                             ->scalarNode('resource')->defaultValue('*')->end()
                             ->scalarNode('resource_type')->defaultValue('annotation')->end()
                             ->scalarNode('binding')

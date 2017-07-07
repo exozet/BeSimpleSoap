@@ -53,6 +53,7 @@ class WebServiceContext
                 $this->serviceDefinition = $this->loader->load($this->options['resource'], $this->options['resource_type']);
                 $this->serviceDefinition->setName($this->options['name']);
                 $this->serviceDefinition->setNamespace($this->options['namespace']);
+                $this->serviceDefinition->setTargetName($this->options['target_name']);
                 $this->serviceDefinition->setOptions([
                     'style'   => $this->options['style'],
                     'use'     => $this->options['use'],
