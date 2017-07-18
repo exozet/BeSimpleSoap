@@ -12,9 +12,11 @@
 
 namespace BeSimple\SoapBundle\Controller;
 
+use ass\XmlSecurity\Key;
 use BeSimple\SoapBundle\Handler\ExceptionHandler;
 use BeSimple\SoapBundle\Soap\SoapRequest;
 use BeSimple\SoapBundle\Soap\SoapResponse;
+use BeSimple\SoapCommon\WsSecurityKey;
 use BeSimple\SoapServer\SoapServerBuilder;
 use BeSimple\SoapServer\WsSecurityFilter;
 use Symfony\Component\DependencyInjection\ContainerAware;
@@ -73,8 +75,15 @@ class SoapWebServiceController extends ContainerAware
             ->build()
         ;
 
-        $wsse = new WsSecurityFilter(true, 300);
-        $this->soapServer->getSoapKernel()->registerFilter($wsse);
+        if (!is_null($webServiceContext->getOption('public_key'))) {
+            $key = new WsSecurityKey();
+            $key->addPublicKey(Key::RSA_SHA1, $webServiceContext->getOption('public_key'));
+            $key->addPrivateKey(Key::RSA_SHA1,$webServiceContext->getOption('private_key'));
+
+            $wsse = new WsSecurityFilter(true, 300);
+            $wsse->setUserSecurityKeyObject($key);
+            $this->soapServer->getSoapKernel()->registerFilter($wsse);
+        }
 
         ob_start();
         $this->soapServer->handle($this->soapRequest->getSoapMessage());

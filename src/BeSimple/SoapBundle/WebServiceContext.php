@@ -121,4 +121,13 @@ class WebServiceContext
 
         return $this->serverBuilder;
     }
+
+    public function getOption($key)
+    {
+        if (isset($this->options[$key])) {
+            return $this->options[$key];
+        }
+
+        return null;
+    }
 }
