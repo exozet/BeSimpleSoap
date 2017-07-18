@@ -16,6 +16,7 @@ use BeSimple\SoapBundle\Handler\ExceptionHandler;
 use BeSimple\SoapBundle\Soap\SoapRequest;
 use BeSimple\SoapBundle\Soap\SoapResponse;
 use BeSimple\SoapServer\SoapServerBuilder;
+use BeSimple\SoapServer\WsSecurityFilter;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,6 +72,9 @@ class SoapWebServiceController extends ContainerAware
             ->withHandler($this)
             ->build()
         ;
+
+        $wsse = new WsSecurityFilter(true, 300);
+        $this->soapServer->getSoapKernel()->registerFilter($wsse);
 
         ob_start();
         $this->soapServer->handle($this->soapRequest->getSoapMessage());
