@@ -82,6 +82,7 @@ class SoapWebServiceController extends ContainerAware
 
             $wsse = new WsSecurityFilter(true, 300);
             $wsse->setUserSecurityKeyObject($key);
+            $wsse->setSecurityOptionsSignature(WsSecurityFilter::TOKEN_REFERENCE_SECURITY_TOKEN, true);
             $this->soapServer->getSoapKernel()->registerFilter($wsse);
         }
 
