@@ -59,6 +59,7 @@ class WebServiceContext
                     'use'     => $this->options['use'],
                     'version' => $this->options['version'],
                 ]);
+                $this->serviceDefinition->setNamespaceTypes($this->options['namespace_types']);
 
                 $cache->write('<?php return unserialize('.var_export(serialize($this->serviceDefinition), true).');');
             }

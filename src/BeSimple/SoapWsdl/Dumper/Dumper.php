@@ -163,6 +163,12 @@ class Dumper
         $this->domDefinitions->setAttribute('name', $this->definition->getName());
         $this->domDefinitions->setAttribute('targetNamespace', $this->definition->getNamespace());
 
+        if (!empty($namepsaceTypes = $this->definition->getNamespaceTypes())) {
+            foreach ($namepsaceTypes as $namepsaceType) {
+                $this->domDefinitions->setAttribute(static::XML_NS.':'.$namepsaceType['name'], $namepsaceType['url']);
+            }
+        }
+
         $this->domDefinitions->setAttributeNS(static::XML_NS_URI, static::XML_NS, static::WSDL_NS_URI);
         $this->domDefinitions->setAttributeNS(static::XML_NS_URI, static::XML_NS.':'.static::TARGET_NS, $this->definition->getNamespace());
         $this->domDefinitions->setAttributeNS(static::XML_NS_URI, static::XML_NS.':'.static::TYPES_NS, $this->definition->getNamespace().'/types');
@@ -246,16 +252,45 @@ class Dumper
 
         $this->domSchema = $this->document->createElement(static::XSD_NS.':schema');
         $this->domSchema->setAttribute('targetNamespace', $this->definition->getNamespace());
+
+        if (!empty($namepsaceTypes = $this->definition->getNamespaceTypes())) {
+            $this->domSchema->setAttribute('elementFormDefault', 'qualified');
+            $this->domSchema->setAttribute('attributeFormDefault', 'unqualified');
+            foreach ($namepsaceTypes as $namepsaceType) {
+                $this->domSchema->setAttribute(static::XML_NS.':'.$namepsaceType['name'], $namepsaceType['url']);
+            }
+        }
+
         $types->appendChild($this->domSchema);
 
         foreach ($this->definition->getTypeRepository()->getComplexTypes() as $type) {
-            $this->addComplexType($type);
+            if ( '' == $type->getType()) {
+                $this->addComplexType($type, $this->domSchema);
+            }
+        }
+
+        if (!empty($namepsaceTypes = $this->definition->getNamespaceTypes())) {
+            foreach ($namepsaceTypes as $namepsaceType) {
+                $schema = $this->document->createElement(static::XSD_NS.':schema');
+                $schema->setAttribute(static::XML_NS.':'.$namepsaceType['name'], $namepsaceType['url']);
+                $schema->setAttribute('targetNamespace', $namepsaceType['url']);
+                $schema->setAttribute('elementFormDefault', 'qualified');
+                $schema->setAttribute('attributeFormDefault', 'unqualified');
+
+                $types->appendChild($schema);
+
+                foreach ($this->definition->getTypeRepository()->getComplexTypes() as $type) {
+                    if ( $namepsaceType['name'] == $type->getType()) {
+                        $this->addComplexType($type, $schema);
+                    }
+                }
+            }
         }
 
         return $types;
     }
 
-    protected function addComplexType(ComplexType $type)
+    protected function addComplexType(ComplexType $type, $domSchema)
     {
         $complexType = $this->document->createElement(static::XSD_NS.':complexType');
         $complexType->setAttribute('name', $type->getXmlType());
@@ -275,7 +310,11 @@ class Dumper
                     $name = $childType->getName();
                 }
 
-                $element->setAttribute('type', static::TARGET_NS.':'.$name);
+                if ('' != $child->getTarget()) {
+                    $element->setAttribute('type', $child->getTarget().':'.$name);
+                } else {
+                    $element->setAttribute('type', static::TARGET_NS.':'.$name);
+                }
             } else {
                 $element->setAttribute('type', $childType);
             }
@@ -292,7 +331,7 @@ class Dumper
             $all->appendChild($element);
         }
 
-        $this->domSchema->appendChild($complexType);
+        $domSchema->appendChild($complexType);
     }
 
     protected function addPortType()
